@@ -58,10 +58,10 @@ bin/console server:start
 ## Authorisation
 
 Go to route /api/login:<br>
-ROLE_USER:<br>
-    username:user<br>
-    password:user<br>
+**ROLE_USER**:<br>
+    --username:**user**<br>
+    --password:**user**<br>
     
-ROLE_ADMIN<br>
-    username:admin<br>
-    password:admin<br>
+**ROLE_ADMIN**<br>
+    --username:**admin**<br>
+    --password:**admin**<br>
