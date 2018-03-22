@@ -1,0 +1,40 @@
+# Read the documentation: https://symfony.com/doc/master/bundles/FOSRestBundle/index.html
+fos_rest:
+    param_fetcher_listener:  true
+    allowed_methods_listener:  true
+    routing_loader: true
+    body_listener: true
+    view:
+        view_response_listener: true
+        mime_types:
+            json: ['application/json', 'application/json;version=1.0', 'application/json;version=1.1']
+
+        formats:
+            json: true
+#    exception:
+#        codes:
+#            App\Exception\MyException: 403
+#        messages:
+#            App\Exception\MyException: Forbidden area.
+    format_listener:
+        rules:
+            - { path: ^/api, prefer_extension: true, fallback_format: json, priorities: [ json ] }
+
+
+#
+#fos_rest:
+#    body_listener: true
+#    format_listener:
+#        rules:
+#            - { path: '^/admin', priorities: ['html'], fallback_format: html, prefer_extension: false }
+#            - { path: '^/', priorities: ['json'], fallback_format: json, prefer_extension: false }
+#    param_fetcher_listener: true
+#    view:
+#        view_response_listener: 'force'
+#        formats:
+#            json: true
+#    serializer:
+#        serialize_null: true
+#    exception:
+#        enabled: true
+#        exception_controller: Rest\RestBundle\Controller\ExceptionController::handleErrorAction

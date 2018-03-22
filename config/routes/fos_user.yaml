@@ -1,0 +1,10 @@
+#fos_user:
+#    type: rest
+#    prefix: /api
+#    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+
+
+#
+#users:
+#    type:     rest
+#    resource: App\Controller\ApiAuthController

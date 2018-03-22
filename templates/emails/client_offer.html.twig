@@ -1,0 +1,12 @@
+{% extends "emails/base.html.twig" %}
+
+{% block title %}Возврат денег за билеты{% endblock %}
+
+{% block header %}{{ nameAndPatronymic }}, вы можете вернуь деньги за задержанный или отмененный рейс.{% endblock %}
+
+{% block content %}
+<p>
+    <span>Подробная информация на сайте </span>
+    <a href="{{ linkHref }}">{{ linkText }}</a>
+</p>
+{% endblock %}

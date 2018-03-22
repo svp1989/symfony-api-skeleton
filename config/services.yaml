@@ -1,0 +1,71 @@
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    locale: 'en'
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: false       # Allows optimizing the container by removing unused services; this also means
+                            # fetching services directly from the container via $container->get() won't work.
+                            # The best practice is to be explicit about your dependencies anyway.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{Entity,Security,Migrations,Utils,Service,Tests,Kernel.php}'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+    app.password:
+        class: App\Utils\Password
+        arguments: ["@security.password_encoder"]
+
+    token_authenticator:
+        class: App\Security\TokenAuthenticator
+        arguments: ['@lexik_jwt_authentication.encoder.default', '@doctrine.orm.entity_manager']
+        public: true
+
+    user_manager:
+        class: App\Utils\UserManager
+        arguments:
+                - '@fos_user.util.password_updater'
+                - '@fos_user.util.canonical_fields_updater'
+                - '@doctrine.orm.default_entity_manager'
+                - '%fos_user.model.user.class%'
+        public: true
+
+    'App\Doctrine\CurrentUserExtension':
+        tags:
+            - { name: api_platform.doctrine.orm.query_extension.collection, priority: 9 }
+            - { name: api_platform.doctrine.orm.query_extension.item }
+
+    mail_sender:
+        class: App\Mail\MailSender
+        arguments:
+                - '@fos_user.mailer.twig_swift'
+                - '@swiftmailer.transport.real'
+                - true
+        public: true
+
+    token_generator:
+        class: App\Security\TokenGenerator
+        arguments: ['@fos_user.util.token_generator.default']
+        public: true
+
+    user_role_provider:
+        class: App\Service\RoleService
+        arguments:
+            - '@token_authenticator'
+            - '@Symfony\Component\HttpFoundation\RequestStack'
+            - '@doctrine.orm.entity_manager'
+        public: true

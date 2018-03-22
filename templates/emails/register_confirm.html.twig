@@ -1,0 +1,12 @@
+{% extends "emails/base.html.twig" %}
+
+{% block title %}Подтверждение E-mail{% endblock %}
+
+{% block header %}Подтвердите адрес электронной почты пользователя {{ username }}, указанный при регистрации{% endblock %}
+
+{% block content %}
+<p>
+    <span>Для подтверждения E-mail нажмите на ссылку:</span>
+    <a href="{{ linkHref }}">{{ linkText }}</a>
+</p>
+{% endblock %}

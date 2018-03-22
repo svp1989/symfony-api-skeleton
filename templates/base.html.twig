@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+        {% block body %}{% endblock %}
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>
+
+<script>
+    $('#DataTables_Table_1 a').each((x, y) => {
+
+        $.get(y.href, (res)=>{
+        console.log(y.innerText)
+    $(res).find('table.prettyTable').children('tbody').children().each((x, y) => {
+        console.log($($(y).find('td')[0]).text() + ';' + $($(y).find('td')[0]).text() + ';' + $($(y).find('td')[2]).text() + ';' + $($(y).find('td')[3]).text() + "\n")
+    });
+
+    });
+    });
+
+
+    $('.flightPageFriendlyIdent > div.flightPageIdent')[1].innerText
+    $('.displayFlexElementContainer')[1].innerText
+</script>

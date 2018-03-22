@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="utf-8">
+        <title>{% block title %}{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+        <h3 class="email-header">{% block header %}{% endblock %}</h3>
+        <div class="email-content">{% block content %}{% endblock %}</div>
+    </body>
+</html>

@@ -1,0 +1,14 @@
+controllers:
+    prefix: /api
+    resource: ../src/Controller/
+
+api_entrypoint:
+    path: /api
+    methods: [GET]
+
+api_doc:
+    path: /api
+    methods: [GET]
+
+api_jsonld_context:
+    path: /api

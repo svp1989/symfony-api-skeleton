@@ -1,0 +1,26 @@
+api_platform:
+    enable_fos_user: true
+    swagger:
+        api_keys:
+            apiKey:
+                name: Authorization
+                type: header
+    mapping:
+        paths: ['%kernel.project_dir%/src/Entity']
+#    formats:
+#        json:
+#            mime_types: ['application/json']
+    formats:
+        json:
+            mime_types: ['application/json']
+
+        html:
+            mime_types: ['text/html']
+
+    collection:
+        pagination:
+            client_items_per_page: true
+            items_per_page_parameter_name: itemsPerPage
+
+    enable_nelmio_api_doc: true
+# api/config/packages/api_platform.yaml
