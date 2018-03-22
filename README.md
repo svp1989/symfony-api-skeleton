@@ -57,11 +57,11 @@ bin/console server:start
 ```
 ## Authorisation
 
-Go to route /api/login:
-ROLE_USER:
-    username:user
-    password:user
+Go to route /api/login:<br>
+ROLE_USER:<br>
+    username:user<br>
+    password:user<br>
     
-ROLE_ADMIN
-    username:admin
-    password:admin
+ROLE_ADMIN<br>
+    username:admin<br>
+    password:admin<br>
