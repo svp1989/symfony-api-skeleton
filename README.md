@@ -21,11 +21,14 @@ composer install
 
 ### 3. Create JWT auth keys
 
-Create JWT auth keys:
+Create JWT auth keys and configure `.env`:
 
 ```bash
-make generate-jwt-keys
+ssh-keygen -t rsa -b 4096 -f private.pem
+openssl rsa -in private.pem -pubout -outform PEM -out public.pem
+
 ```
+
 
 ### 4. Configuration
 
@@ -56,8 +59,9 @@ bin/console server:start
 
 Go to route /api/login:
 ROLE_USER:
-username:user
-password:user
+    username:user
+    password:user
+    
 ROLE_ADMIN
-username:admin
-password:admin
+    username:admin
+    password:admin
