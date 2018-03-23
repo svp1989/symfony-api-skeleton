@@ -3,15 +3,20 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\HasLifecycleCallbacks()
  * @ApiResource()
+ * @UniqueEntity(
+ *     fields={"email", "username"}
+ * )
  */
 class User extends BaseUser
 {
@@ -29,12 +34,19 @@ class User extends BaseUser
     private $client;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Post", mappedBy="user")
+     */
+    private $posts;
+
+    /**
      * @ORM\Column(type="string")
+     * @Assert\NotBlank()
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string")
+     * @Assert\NotBlank()
      */
     private $lastName;
 
@@ -53,7 +65,11 @@ class User extends BaseUser
      */
     private $updatedAt;
 
-
+    public function __construct()
+    {
+        $this->posts = new ArrayCollection();
+        parent::__construct();
+    }
 
     /**
      * @ORM\PrePersist()
@@ -77,6 +93,14 @@ class User extends BaseUser
     public function getId(): int
     {
         return $this->id;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getPosts():? array
+    {
+        return $this->posts->toArray();
     }
 
     /**

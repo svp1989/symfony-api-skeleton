@@ -6,6 +6,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInter
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use App\Entity\Client;
+use App\Entity\Post;
 use App\Entity\User;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -17,8 +18,8 @@ final class CurrentUserExtension implements QueryCollectionExtensionInterface, Q
     private $authorizationChecker;
     const ENTITIES = [
         Client::class,
-        User::class,
-
+        Post::class,
+        User::class
     ];
 
     public function __construct(TokenStorageInterface $tokenStorage, AuthorizationCheckerInterface $checker)
@@ -57,14 +58,11 @@ final class CurrentUserExtension implements QueryCollectionExtensionInterface, Q
         ) {
             $rootAlias = $queryBuilder->getRootAliases()[0];
             switch ($resourceClass) {
-                case User::class:
-                    $queryBuilder->andWhere(sprintf('%s.id = :current_user', $rootAlias));
-                    break;
-                default:
+                case Post::class:
                     $queryBuilder->andWhere(sprintf('%s.user = :current_user', $rootAlias));
+                    $queryBuilder->setParameter('current_user', $user->getId());
+                    break;
             }
-
-            $queryBuilder->setParameter('current_user', $user->getId());
         }
     }
 }

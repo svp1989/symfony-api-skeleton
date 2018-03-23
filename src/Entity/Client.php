@@ -3,10 +3,10 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
-
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ClientRepository")
  * @ORM\HasLifecycleCallbacks()
@@ -14,6 +14,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     attributes={
  *          "normalization_context"={"groups"={"client"}}
  *     }
+ * )
+ * @UniqueEntity(
+ *     fields={"phone", "email"}
  * )
  */
 class Client
@@ -32,23 +35,26 @@ class Client
     private $user;
 
     /**
-     * @ORM\Column(type="string", length=100, nullable=true)
+     * @ORM\Column(type="string", length=100, nullable=true, unique=true)
      * @Groups({"client"})
      */
     private $phone;
     /**
-     * @ORM\Column(type="string", length=100, nullable=true)
+     * @ORM\Column(type="string", length=100, nullable=true, unique=true)
      * @Groups({"client"})
+     * @Assert\Email()
      */
     private $email;
     /**
      * @ORM\Column(type="string", name="first_name")
      * @Groups({"client"})
+     * @Assert\NotBlank()
      */
     private $firstName;
     /**
      * @ORM\Column(type="string", name="last_name")
      * @Groups({"client"})
+     * @Assert\NotBlank()
      */
     private $lastName;
     /**
@@ -62,18 +68,19 @@ class Client
      */
     private $citizenship;
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=50, nullable=true)
      * @Groups({"client"})
      */
     private $document;
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      * @Groups({"client"})
      */
     private $number;
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      * @Groups({"client"})
+     * @Assert\Date()
      */
     private $birthday;
 
