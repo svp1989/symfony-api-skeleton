@@ -15,6 +15,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\HasLifecycleCallbacks()
  * @ApiResource(
  *     attributes={
+ *          "access_control"="is_granted('ROLE_ADMIN')",
  *          "normalization_context"={
  *                 "groups"={"get_users"},
  *                 "datetime_format"="d.m.Y H:i:s"
