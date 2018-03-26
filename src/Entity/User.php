@@ -3,35 +3,54 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Entity\Traits\IdTrait;
+use App\Entity\Traits\TimestampTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\HasLifecycleCallbacks()
- * @ApiResource()
- * @UniqueEntity(
- *     fields={"email", "username"}
+ * @ApiResource(
+ *     attributes={
+ *          "normalization_context"={
+ *                 "groups"={"get_users"},
+ *                 "datetime_format"="d.m.Y H:i:s"
+ *          }
+ *     }
  * )
  */
 class User extends BaseUser
 {
+    use IdTrait;
+    use TimestampTrait;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"get_users"})
      */
     protected $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="Client", inversedBy="user")
-     * @ORM\JoinColumn(name="client_id", referencedColumnName="id", nullable=true)
+     * @Groups({"get_users"})
      */
-    private $client;
+    protected $username;
+
+    /**
+     * @Groups({"get_users"})
+     */
+    protected $email;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Profile", inversedBy="user", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id")
+     * @Groups({"get_users"})
+     */
+    private $profile;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Post", mappedBy="user")
@@ -39,160 +58,15 @@ class User extends BaseUser
     private $posts;
 
     /**
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank()
+     * @ORM\Column(type="datetime", name="created_at")
+     * @Groups({"get_users"})
      */
-    private $firstName;
-
-    /**
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank()
-     */
-    private $lastName;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $patronymic;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $createdAt;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $updatedAt;
+    protected $createdAt;
 
     public function __construct()
     {
         $this->posts = new ArrayCollection();
         parent::__construct();
-    }
-
-    /**
-     * @ORM\PrePersist()
-     */
-    public function prePersist(): void
-    {
-        $this->setCreatedAt(new \DateTime());
-    }
-
-    /**
-     * @ORM\PreUpdate()
-     */
-    public function preUpdate(): void
-    {
-        $this->setUpdatedAt(new \DateTime());
-    }
-
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return array|null
-     */
-    public function getPosts():? array
-    {
-        return $this->posts->toArray();
-    }
-
-    /**
-     * @param Client $client
-     * @return User
-     */
-    public function setClient(Client $client = null): self
-    {
-        $this->client = $client;
-        return $this;
-    }
-
-    /**
-     * @return Client
-     */
-    public function getClient():? Client
-    {
-        return $this->client;
-    }
-
-    /**
-     * @param $firstName
-     * @return User
-     */
-    public function setFirstName($firstName = null): self
-    {
-        $this->firstName = $firstName;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFirstName():?string
-    {
-        return $this->firstName;
-    }
-
-    /**
-     * @param $lastName
-     * @return User
-     */
-    public function setLastName($lastName): self
-    {
-        $this->lastName = $lastName;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLastName():? string
-    {
-        return $this->lastName;
-    }
-
-    /**
-     * @param null $patronymic
-     * @return User
-     */
-    public function setPatronymic($patronymic = null): self
-    {
-        $this->patronymic = $patronymic;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPatronymic():? string
-    {
-        return $this->patronymic;
-    }
-
-    /**
-     * @param \DateTime $createdAt
-     * @return User
-     */
-    public function setCreatedAt(\DateTime $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-        return $this;
-    }
-
-    /**
-     * @param \DateTime $updatedAt
-     * @return User
-     */
-    public function setUpdatedAt(\DateTime $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
-        return $this;
     }
 
     /**
@@ -202,28 +76,29 @@ class User extends BaseUser
     {
         return $this->createdAt;
     }
-
     /**
-     * @return \DateTime
+     * @return array|null
      */
-    public function getUpdatedAt(): \DateTime
+    public function getPosts():? array
     {
-        return $this->updatedAt;
+        return $this->posts->toArray();
     }
 
     /**
-     * @return array
+     * @param Profile|null $profile
+     * @return User
      */
-    public function getProfile(): array
+    public function setProfile(Profile $profile = null): self
     {
-        return [
-            'id' => $this->getId(),
-            'username' => $this->getUsername(),
-            'email' => $this->getEmail(),
-            'first_name' => $this->getFirstName(),
-            'last_name' => $this->getLastName(),
-            'patronymic' => $this->getPatronymic(),
-            'role' => $this->getRoles()
-        ];
+        $this->profile = $profile;
+        return $this;
+    }
+
+    /**
+     * @return Profile|null
+     */
+    public function getProfile():? Profile
+    {
+        return $this->profile;
     }
 }

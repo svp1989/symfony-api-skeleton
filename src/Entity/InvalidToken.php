@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Entity\Traits\IdTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -11,12 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class InvalidToken
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    protected $id;
+    use IdTrait;
 
     /**
      * @ORM\Column(type="integer")
@@ -28,11 +24,6 @@ class InvalidToken
      */
     protected $hash;
 
-    function getId(): int
-    {
-        return $this->id;
-    }
-
     /**
      * @param int $expiration
      * @return InvalidToken
@@ -41,7 +32,6 @@ class InvalidToken
     {
         $this->expiration = $expiration;
         return $this;
-
     }
 
     /**

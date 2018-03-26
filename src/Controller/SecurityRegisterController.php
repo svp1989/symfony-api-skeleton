@@ -11,8 +11,6 @@ use App\Utils\EntityEditor;
 use Swagger\Annotations as SWG;
 use Symfony\Component\Validator\Constraints\Email as EmailConstraint;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
-use Symfony\Component\Routing\Route;
-use App\Utils\Constants;
 
 /**
  * Class SecurityRegisterController

@@ -17,7 +17,6 @@ final class CurrentUserExtension implements QueryCollectionExtensionInterface, Q
     private $tokenStorage;
     private $authorizationChecker;
     const ENTITIES = [
-        Client::class,
         Post::class,
         User::class
     ];

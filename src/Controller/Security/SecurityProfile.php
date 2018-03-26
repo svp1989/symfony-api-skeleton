@@ -16,33 +16,18 @@ use Symfony\Component\HttpFoundation\Request;
 interface SecurityProfile
 {
     /**
-     * GET /api/profile - user profile
-     * @Rest\Route("/profile")
+     * PUT /api/profiles/change-password - change password
      * @param Request $request
-     * @return JsonResponse
-     */
-    public function getProfileAction(Request $request);
-
-    /**
-     * PUT /api/profile/edit - edit user profile
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function putProfileEditAction(Request $request): JsonResponse;
-
-    /**
-     * PUT /api/profile/change-password - change password
-     * @param Request $request
-     * @Rest\Route("/profile/change-password")
+     * @Rest\Route("/profiles/change-password")
      * @return JsonResponse
      */
     public function putChangePasswordAction(Request $request): JsonResponse;
 
     /**
-     * GET /api/profile/confirm-email-update/{token} - confirm email address
+     * GET /api/profiles/confirm-email-update/{token} - confirm email address
      * @param $token string
-     * @Rest\Route("/profile/confirm-email-update/{token}")
+     * @Rest\Route("/profiles/confirm-email-update/{token}")
      * @return JsonResponse
      */
-    public function getProfileConfirmEmailUpdateAction($token): JsonResponse;
+    public function getProfilesConfirmEmailUpdateAction($token): JsonResponse;
 }

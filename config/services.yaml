@@ -69,3 +69,11 @@ services:
             - '@Symfony\Component\HttpFoundation\RequestStack'
             - '@doctrine.orm.entity_manager'
         public: true
+
+    profile_service:
+        class: App\Service\Profile
+        arguments:
+            - '@token_authenticator'
+            - '@Symfony\Component\HttpFoundation\RequestStack'
+            - '@doctrine.orm.entity_manager'
+        public: true

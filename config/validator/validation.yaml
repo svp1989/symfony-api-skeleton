@@ -1,0 +1,25 @@
+App\Entity\User:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: [username]
+            message: 'Username exists'
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: [email]
+            message: 'E-mail exists'
+    properties:
+        username:
+            - NotBlank:
+                message: 'Invalid username'
+            - Type:
+                type: string
+        email:
+            - NotBlank:
+                message: 'Invalid e-mail'
+            - Email:
+                message: 'Invalid e-mail'
+        password:
+            - NotBlank:
+            - Type:
+                type: string
+            - Length:
+                min: 8

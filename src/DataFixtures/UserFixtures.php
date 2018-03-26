@@ -4,21 +4,20 @@ namespace App\DataFixtures;
 
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class UserFixtures extends Fixture implements ContainerAwareInterface, FixtureInterface
+class UserFixtures extends Fixture implements ContainerAwareInterface, FixtureInterface, DependentFixtureInterface
 {
     const USERS = [
         [
             'username' => 'user',
             'email' => 'user@user.com',
-            'client' => 1,
-            'firstName' => 'Userf',
-            'lastName' => 'Usern',
+            'profile' => 1,
             'password' => 'user',
             'role' => 'ROLE_USER'
 
@@ -27,7 +26,7 @@ class UserFixtures extends Fixture implements ContainerAwareInterface, FixtureIn
             'username' => 'admin',
             'email' => 'admin@admin.com',
             'firstName' => 'Admin',
-            'lastName' => 'Admin',
+            'profile' => 2,
             'password' => 'admin',
             'role' => 'ROLE_ADMIN'
         ]
@@ -42,13 +41,9 @@ class UserFixtures extends Fixture implements ContainerAwareInterface, FixtureIn
     {
         foreach (self::USERS as $user) {
             $entity = new User();
-            if (isset($user['client'])) {
-                $client = $manager->find('App:Client', $user['client']);
-                $entity->setClient($client);
-            }
+            $profile = $manager->find('App:Profile', $user['profile']);
+            $entity->setProfile($profile);
 
-            $entity->setLastName($user['lastName']);
-            $entity->setFirstName($user['firstName']);
             $entity->setEmail($user['email']);
             $entity->setUsername($user['username']);
             $entity->setEnabled(true);
@@ -57,6 +52,7 @@ class UserFixtures extends Fixture implements ContainerAwareInterface, FixtureIn
             $password = $encoder->encodePassword($entity, $user['password']);
             $entity->addRole($user['role']);
             $entity->setPassword($password);
+
             $manager->persist($entity);
             $manager->flush();
         }
@@ -70,5 +66,16 @@ class UserFixtures extends Fixture implements ContainerAwareInterface, FixtureIn
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDependencies()
+    {
+        return [
+            ProfileFixtures::class
+        ];
+
     }
 }

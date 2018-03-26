@@ -2,19 +2,17 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Client;
+use App\Entity\Profile;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class ClientFixtures extends Fixture
+class ProfileFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
         for ($i = 0; $i < 2; $i++) {
 
-            $entity = new Client();
-            $entity->setPhone('899999999' . $i);
-            $entity->setEmail('user' . $i . '@user.com');
+            $entity = new Profile();
             $entity->setFirstName('Userf' . $i);
             $entity->setLastName('Usern' . $i);
             $entity->setPatronymic('Userp' . $i);

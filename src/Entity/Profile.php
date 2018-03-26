@@ -2,131 +2,73 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use App\Entity\Traits\IdTrait;
+use App\Entity\Traits\TimestampTrait;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ClientRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\PostRepository")
  * @ORM\HasLifecycleCallbacks()
- * @ApiResource(
- *     attributes={
- *          "normalization_context"={"groups"={"client"}}
- *     }
- * )
- * @UniqueEntity(
- *     fields={"phone", "email"}
- * )
  */
-class Client
+class Profile
 {
+    use IdTrait;
+    use TimestampTrait;
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"client"})
+     * @Groups({"get_users"})
      */
-    private $id;
-
+    protected $id;
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\User", mappedBy="client")
+     * @ORM\OneToOne(targetEntity="App\Entity\User", mappedBy="profile")
      */
     private $user;
 
     /**
-     * @ORM\Column(type="string", length=100, nullable=true, unique=true)
-     * @Groups({"client"})
-     */
-    private $phone;
-    /**
-     * @ORM\Column(type="string", length=100, nullable=true, unique=true)
-     * @Groups({"client"})
-     * @Assert\Email()
-     */
-    private $email;
-    /**
      * @ORM\Column(type="string", name="first_name")
-     * @Groups({"client"})
      * @Assert\NotBlank()
+     * @Assert\Type(type="string")
      */
     private $firstName;
     /**
      * @ORM\Column(type="string", name="last_name")
-     * @Groups({"client"})
      * @Assert\NotBlank()
+     * @Assert\Type(type="string")
      */
     private $lastName;
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @Groups({"client"})
+     * @Assert\Type(type="string")
      */
     private $patronymic;
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @Groups({"client"})
+     * @Assert\NotBlank()
+     * @Assert\Type(type="string")
      */
     private $citizenship;
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
-     * @Groups({"client"})
+     * @Assert\NotBlank()
+     * @Assert\Type(type="string")
      */
     private $document;
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @Groups({"client"})
+     * @Assert\NotBlank()
+     * @Assert\Type(type="string")
      */
     private $number;
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Groups({"client"})
+     * @Assert\NotBlank()
      * @Assert\Date()
      */
     private $birthday;
-
-    /**
-     * @ORM\Column(type="datetime", name="created_at")
-     */
-    private $createdAt;
-
-    /**
-     * @ORM\Column(type="datetime", name="updated_at", nullable=true)
-     */
-    private $updatedAt;
-
-    /**
-     * @ORM\PreUpdate()
-     */
-    public function preUpdate(): void
-    {
-        $this->setUpdatedAt(new \DateTime());
-    }
-
-    /**
-     * @ORM\PrePersist()
-     */
-    public function prePersist(): void
-    {
-        $this->setCreatedAt(new \DateTime());
-    }
-
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param User $user
-     * @return Client
-     */
-    public function setUser(User $user): self
-    {
-        $this->user = $user;
-        return $this;
-    }
 
     /**
      * @return User|null
@@ -137,44 +79,19 @@ class Client
     }
 
     /**
-     * @param string $phone
-     * @return $this
+     * @param User $user
+     * @return Profile
      */
-    public function setPhone(string $phone): self
+    public function setUser(User $user): self
     {
-        $this->phone = $phone;
+        $this->user = $user;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getPhone(): string
-    {
-        return $this->phone;
-    }
-
-    /**
-     * @param string $email
-     * @return Client
-     */
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEmail(): string
-    {
-        return $this->email;
-    }
 
     /**
      * @param string $firstName
-     * @return Client
+     * @return Profile
      */
     public function setFirstName(string $firstName): self
     {
@@ -192,7 +109,7 @@ class Client
 
     /**
      * @param string $lastName
-     * @return Client
+     * @return Profile
      */
     public function setLastName(string $lastName): self
     {
@@ -210,7 +127,7 @@ class Client
 
     /**
      * @param string $patronymic
-     * @return Client
+     * @return Profile
      */
     public function setPatronymic(string $patronymic): self
     {
@@ -228,7 +145,7 @@ class Client
 
     /**
      * @param string $citizenship
-     * @return Client
+     * @return Profile
      */
     public function setCitizenship(string $citizenship): self
     {
@@ -246,7 +163,7 @@ class Client
 
     /**
      * @param string $document
-     * @return Client
+     * @return Profile
      */
     public function setDocument(string $document): self
     {
@@ -264,7 +181,7 @@ class Client
 
     /**
      * @param string $number
-     * @return Client
+     * @return Profile
      */
     public function setNumber(string $number): self
     {
@@ -282,7 +199,7 @@ class Client
 
     /**
      * @param \DateTime $birthday
-     * @return Client
+     * @return Profile
      */
     public function setBirthday(\DateTime $birthday): self
     {
@@ -296,41 +213,5 @@ class Client
     public function getBirthday(): \DateTime
     {
         return $this->birthday;
-    }
-
-    /**
-     * @param \DateTime $createdAt
-     * @return Client
-     */
-    public function setCreatedAt(\DateTime $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-        return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt(): \DateTime
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @param \DateTime $updatedAt
-     * @return Client
-     */
-    public function setUpdatedAt(\DateTime $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
-        return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getUpdatedAt(): \DateTime
-    {
-        return $this->updatedAt;
     }
 }
