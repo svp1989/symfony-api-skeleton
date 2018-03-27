@@ -23,9 +23,7 @@ class SecurityRegisterController extends FOSRestController implements SecurityRe
     const REQUIRE_FIELD = [
         'username',
         'password',
-        'email',
-        'first_name',
-        'last_name'
+        'email'
     ];
 
     /**
@@ -247,10 +245,7 @@ class SecurityRegisterController extends FOSRestController implements SecurityRe
      *          example={
      *              "username": "username",
      *              "email": "email",
-     *              "password": "password",
-     *              "first_name": "first_name",
-     *              "last_name": "last_name",
-     *              "client": 0
+     *              "password": "password"
      *          }
      *      )
      * )
