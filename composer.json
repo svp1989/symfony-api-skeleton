@@ -29,6 +29,7 @@
         "symfony/yaml": "^4.0"
     },
     "require-dev": {
+        "codeception/codeception": "^2.4",
         "doctrine/doctrine-fixtures-bundle": "^3.0",
         "symfony/dotenv": "^4.0",
         "symfony/monolog-bundle": "^3.1",

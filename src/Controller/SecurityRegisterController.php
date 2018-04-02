@@ -3,14 +3,15 @@
 namespace App\Controller;
 
 use App\Controller\Security\SecurityRegister;
+use App\Entity\User;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use App\Utils\EntityEditor;
 use Swagger\Annotations as SWG;
 use Symfony\Component\Validator\Constraints\Email as EmailConstraint;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
+use Symfony\Component\Validator\Constraints\Email;
 
 /**
  * Class SecurityRegisterController
@@ -284,114 +285,42 @@ class SecurityRegisterController extends FOSRestController implements SecurityRe
      */
     public function postRegisterAction(Request $request): JsonResponse
     {
-        $props = json_decode($request->getContent(), true);
-        $prop_keys = array_keys($props);
+        $data = json_decode($request->getContent(), false);
 
-        foreach (self::REQUIRE_FIELD as $key) {
-            if (!in_array($key, $prop_keys)) {
-                return new JsonResponse(array(
-                    'code' => 400,
-                    'message' => 'Required property ' . $key
-                ), 400);
-            }
+        $user = new User();
+        $user->setUsername($data->username);
+        $user->setEmail($data->email);
+        $encoder = $this->container->get('security.password_encoder');
+        $password = $encoder->encodePassword($user, $data->password);
+        $user->setPassword($password);
+
+        $validator = $this->get('validator');
+        $validator->validate($user->getEmail());
+
+        $tokenGenerator = $this->container->get('token_generator');
+
+        if (!$user->isEnabled()) {
+            $user->setConfirmationToken($tokenGenerator->generateToken());
         }
 
-        $userRepository = $this->getDoctrine()->getRepository('App:User');
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
 
-        $user = $userRepository->findByUserAndEmail($props['username'], $props['email']);
+        /* if (!$user->isEnabled()) {
+             //TODO: перенести в настройки
+             $routes = $this->container->get('router')->getRouteCollection();
+             $route = new Route('app_register_confirm');
+             $routes->add('app_register_confirm', $route);
 
-        if ($user) {
-            if ($user->isEnabled()) {
-                return new JsonResponse(array(
-                    'code' => 409,
-                    'message' => 'User exists'
-                ), 409);
-            }
-        } else {
-            $userByName = $userRepository->findOneBy(array('username' => $props['username']));
-            $userByEmail = $userRepository->findOneBy(array('email' => $props['email']));
+             $mailer = $this->container->get('mail_sender');
 
-            if ($userByName && $userByName->isEnabled()) {
-                return new JsonResponse(array(
-                    'code' => 409,
-                    'message' => 'Username exists'
-                ), 409);
-            }
-
-            if ($userByEmail && $userByEmail->isEnabled()) {
-                return new JsonResponse(array(
-                    'code' => 409,
-                    'message' => 'E-mail exists'
-                ), 409);
-            }
-
-            if ($userByEmail && ($userByEmail->getUsername() != $props['username'])) {
-                return new JsonResponse(array(
-                    'code' => 400,
-                    'message' => 'Invalid username'
-                ), 400);
-            }
-
-            if ($userByName && ($userByName->getEmail() != $props['email'])) {
-                return new JsonResponse(array(
-                    'code' => 400,
-                    'message' => 'Invalid e-mail'
-                ), 400);
-            }
-
-            $userManager = $this->container->get('user_manager');
-            $user = $userManager->createUser();
-        }
-
-        $editable = array_merge(array(), self::REQUIRE_FIELD);
-        unset($editable['password']);
-        $editor = new EntityEditor($user, $editable);
-
-        if ($editor->update($props)) {
-            $encoder = $this->container->get('security.password_encoder');
-            $password = $encoder->encodePassword($user, $props['password']);
-            $user->setPassword($password);
-
-            if (isset($props['client']) && $props['client']) {
-                $client = $this->getDoctrine()
-                    ->getRepository('App:Client')
-                    ->findOneBy(array('id' => $props['client']));
-
-                if (!$client) {
-                    return new JsonResponse(array(
-                        'code' => 400,
-                        'message' => 'Unknown client id'
-                    ), 400);
-                }
-
-                $user->setClient($client);
-            }
-
-            $tokenGenerator = $this->container->get('token_generator');
-
-            if (!$user->isEnabled()) {
-                $user->setConfirmationToken($tokenGenerator->generateToken());
-            }
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
-        }
-
-       /* if (!$user->isEnabled()) {
-            //TODO: перенести в настройки
-            $routes = $this->container->get('router')->getRouteCollection();
-            $route = new Route('app_register_confirm');
-            $routes->add('app_register_confirm', $route);
-
-            $mailer = $this->container->get('mail_sender');
-
-            $mailer->setTemplate('emails/register_confirm.html.twig')
-                ->setConfirmationRoute(
-                    'app_register_confirm'
-                )
-                ->sendConfirmationEmailMessage($user);
-        }*/
+             $mailer->setTemplate('emails/register_confirm.html.twig')
+                 ->setConfirmationRoute(
+                     'app_register_confirm'
+                 )
+                 ->sendConfirmationEmailMessage($user);
+         }*/
 
         return new JsonResponse(array(
             'success' => 'ok'

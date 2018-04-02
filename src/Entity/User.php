@@ -9,6 +9,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -21,6 +23,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                 "datetime_format"="d.m.Y H:i:s"
  *          }
  *     }
+ * )
+ * @UniqueEntity(
+ *     fields={"username", "email"},
+ *     errorPath="port",
+ *     message="This port is already in use on that host."
  * )
  */
 class User extends BaseUser
@@ -38,11 +45,15 @@ class User extends BaseUser
 
     /**
      * @Groups({"get_users"})
+     * @Assert\NotBlank()
      */
     protected $username;
 
     /**
      * @Groups({"get_users"})
+     * @Assert\Email()
+     * @Assert\NotBlank()
+
      */
     protected $email;
 
