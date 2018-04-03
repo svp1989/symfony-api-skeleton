@@ -4,9 +4,9 @@ declare(strict_types = 1);
 
 namespace App\Controller\Security;
 
-use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Password resetting
@@ -18,7 +18,7 @@ interface SecurityResetting
     /**
      * GET /api/resetting/send-email - send resetting token on email
      * @param Request $request
-     * @Rest\Route("/resetting/send-email")
+     * @Route("/resetting/send-email")
      * @return JsonResponse
      */
     public function postResettingSendEmailAction(Request $request): JsonResponse;
@@ -26,14 +26,14 @@ interface SecurityResetting
     /**
      * GET /api/resetting/check-email - check valid email
      * @param Request $request
-     * @Rest\Route("/resetting/check-email")
+     * @Route("/resetting/check-email")
      * @return JsonResponse
      */
     public function getResettingCheckEmailAction(Request $request): JsonResponse;
 
     /**
      * GET /api/resetting/reset - resetting email
-     * @Rest\Route("/resetting/reset/{token}")
+     * @Route("/resetting/reset/{token}")
      * @param string $token
      * @return JsonResponse
      */

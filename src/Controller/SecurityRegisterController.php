@@ -6,11 +6,11 @@ use App\Controller\Security\SecurityRegister;
 use App\Entity\User;
 use App\Utils\Code;
 use App\Utils\Response;
-use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\FOSRestController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Swagger\Annotations as SWG;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Email as EmailConstraint;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Validator\Constraints\Email;
@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Constraints\Email;
  * Registration
  * @package App\Controller
  */
-class SecurityRegisterController extends FOSRestController implements SecurityRegister
+class SecurityRegisterController extends Controller implements SecurityRegister
 {
 
     const REQUIRE_FIELD = [
@@ -70,7 +70,7 @@ class SecurityRegisterController extends FOSRestController implements SecurityRe
      *          @SWG\Property(property="message", type="string", description="Error message")
      *      )
      * )
-     * @Rest\Route("/register/check-email", methods={"GET"})
+     * @Route("/register/check-email", methods={"GET"})
      * @param Request $request
      * @return JsonResponse
      */
@@ -150,7 +150,7 @@ class SecurityRegisterController extends FOSRestController implements SecurityRe
      *          @SWG\Property(property="message", type="string", description="Error message")
      *      )
      * )
-     * @Rest\Route("/register/check-username", methods={"GET"})
+     * @Route("/register/check-username", methods={"GET"})
      * @param Request $request
      * @return JsonResponse
      */
@@ -208,7 +208,7 @@ class SecurityRegisterController extends FOSRestController implements SecurityRe
      *          @SWG\Property(property="message", type="string", description="Error message")
      *      )
      * )
-     * @Rest\Route("/register/confirm/{token}", methods={"GET"})
+     * @Route("/register/confirm/{token}", methods={"GET"})
      * @param string $token
      * @return JsonResponse
      */
@@ -271,7 +271,7 @@ class SecurityRegisterController extends FOSRestController implements SecurityRe
      *          @SWG\Property(property="errors", type="string", description="Error message")
      *      )
      * )
-     * @Rest\Route("/register", methods={"POST"})
+     * @Route("/register", methods={"POST"})
      * @param Request $request
      * @return JsonResponse
      */
@@ -321,7 +321,7 @@ class SecurityRegisterController extends FOSRestController implements SecurityRe
      *          @SWG\Property(property="confirmed", type="string", description="Registration is confirmed")
      *      )
      * )
-     * @Rest\Route("/register/confirmed", methods={"GET"})
+     * @Route("/register/confirmed", methods={"GET"})
      * @param Request $request
      * @return JsonResponse
      */

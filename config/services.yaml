@@ -32,7 +32,10 @@ services:
 
     token_authenticator:
         class: App\Security\TokenAuthenticator
-        arguments: ['@lexik_jwt_authentication.encoder.default', '@doctrine.orm.entity_manager']
+        arguments:
+            - '@lexik_jwt_authentication.encoder.default'
+            - '@doctrine.orm.entity_manager'
+            - '@Symfony\Component\HttpFoundation\RequestStack'
         public: true
 
     user_manager:
@@ -69,7 +72,6 @@ services:
             - '@Symfony\Component\HttpFoundation\RequestStack'
             - '@doctrine.orm.entity_manager'
         public: true
-
 
     app_validator:
         class: App\Utils\Validator

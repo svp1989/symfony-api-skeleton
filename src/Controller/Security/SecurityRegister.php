@@ -4,9 +4,9 @@ declare(strict_types = 1);
 
 namespace App\Controller\Security;
 
-use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Registration
@@ -18,7 +18,7 @@ interface SecurityRegister
 
     /**
      * POST /api/register - user registration
-     * @Rest\Route("/register")
+     * @Route("/register")
      * @param Request $request
      * @return JsonResponse
      */
@@ -27,7 +27,7 @@ interface SecurityRegister
     /**
      * GET /api/register/check-email - check email address
      * @param Request $request
-     * @Rest\Route("/register/check-email")
+     * @Route("/register/check-email")
      * @return JsonResponse
      */
     public function getRegisterCheckEmailAction(Request $request): JsonResponse;
@@ -35,14 +35,14 @@ interface SecurityRegister
     /**
      * GET /api/register/check-username - check username
      * @param Request $request
-     * @Rest\Route("/register/check-username)
+     * @Route("/register/check-username)
      * @return JsonResponse
      */
     public function getRegisterCheckUsernameAction(Request $request): JsonResponse;
 
     /**
      * GET /api/register/confirm/{token} - confirm registration
-     * @Rest\Route("/register/confirm/{token})
+     * @Route("/register/confirm/{token})
      * @param $token string
      * @return JsonResponse
      */

@@ -3,10 +3,10 @@
 namespace App\Controller;
 
 use App\Controller\Security\SecurityProfile;
-use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\FOSRestController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Swagger\Annotations as SWG;
 
@@ -15,7 +15,7 @@ use Swagger\Annotations as SWG;
  * Working with user profile
  * @package App\Controller
  */
-class SecurityProfileController extends FOSRestController implements SecurityProfile
+class SecurityProfileController extends Controller implements SecurityProfile
 {
 
     /**
@@ -53,7 +53,7 @@ class SecurityProfileController extends FOSRestController implements SecurityPro
      *      )
      * )
      * @param Request $request
-     * @Rest\Route("/profiles/change-password", methods={"PUT"})
+     * @Route("/profiles/change-password", methods={"PUT"})
      * @return JsonResponse
      */
     public function putChangePasswordAction(Request $request): JsonResponse
@@ -115,7 +115,7 @@ class SecurityProfileController extends FOSRestController implements SecurityPro
      *      )
      * )
      * @param $token string
-     * @Rest\Route("/profiles/confirm-email-update/{token}", methods={"GET"})
+     * @Route("/profiles/confirm-email-update/{token}", methods={"GET"})
      * @return JsonResponse
      */
     public function getProfilesConfirmEmailUpdateAction($token): JsonResponse

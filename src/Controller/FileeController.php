@@ -2,14 +2,11 @@
 
 namespace App\Controller;
 
-use App\Controller\Security\SecurityResetting;
-use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\FOSRestController;
 use Swagger\Annotations as SWG;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Constraints\Email as EmailConstraint;
-use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
+use Symfony\Component\Routing\Annotation\Route;
 use App\Utils\UploadLimits;
 use App\Entity\Files;
 
@@ -18,7 +15,7 @@ use App\Entity\Files;
  * Класс восстановления пароля
  * @package App\Controller
  */
-class EntityFilesController extends FOSRestController
+class FileeController extends Controller
 {
     /**
      * Upload file on the server
@@ -100,7 +97,7 @@ class EntityFilesController extends FOSRestController
      *          @SWG\Property(property="message", type="string", description="Error message")
      *      )
      * )
-     * @Rest\Route(
+     * @Route(
      *      "/files/upload",
      *      methods={"POST"},
      *      defaults={"_api_resource_class"="App\Entity\Files"}

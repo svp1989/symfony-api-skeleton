@@ -4,9 +4,9 @@ declare(strict_types = 1);
 
 namespace App\Controller\Security;
 
-use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * User profile
@@ -18,7 +18,7 @@ interface SecurityProfile
     /**
      * PUT /api/profiles/change-password - change password
      * @param Request $request
-     * @Rest\Route("/profiles/change-password")
+     * @Route("/profiles/change-password")
      * @return JsonResponse
      */
     public function putChangePasswordAction(Request $request): JsonResponse;
@@ -26,7 +26,7 @@ interface SecurityProfile
     /**
      * GET /api/profiles/confirm-email-update/{token} - confirm email address
      * @param $token string
-     * @Rest\Route("/profiles/confirm-email-update/{token}")
+     * @Route("/profiles/confirm-email-update/{token}")
      * @return JsonResponse
      */
     public function getProfilesConfirmEmailUpdateAction($token): JsonResponse;
