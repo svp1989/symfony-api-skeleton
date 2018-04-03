@@ -2,6 +2,10 @@
 
 namespace App\Mail;
 
+/**
+ * Class PreparedEmail
+ * @package App\Mail
+ */
 class PreparedEmail
 {
     public $subject;

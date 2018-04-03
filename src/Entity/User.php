@@ -24,11 +24,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *          }
  *     }
  * )
- * @UniqueEntity(
- *     fields={"username", "email"},
- *     errorPath="port",
- *     message="This port is already in use on that host."
- * )
  */
 class User extends BaseUser
 {

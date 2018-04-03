@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Controller\Security\SecurityRegister;
 use App\Entity\User;
+use App\Utils\Code;
+use App\Utils\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -255,28 +257,18 @@ class SecurityRegisterController extends FOSRestController implements SecurityRe
      *      description="User registered",
      *      @SWG\Schema(
      *          type="object",
-     *          example={"success": "ok"},
+     *          example={"code": "200", "message": "success"},
      *          @SWG\Property(property="success", type="string", description="User registered")
      *      )
      * )
      * @SWG\Response(
      *      response=400,
-     *      description="'Required property', 'Invalid username', 'Invalid e-mail', 'Unknown client id'",
+     *      description="'Required property', 'Invalid username', 'Invalid e-mail'",
      *      @SWG\Schema(
      *          type="object",
-     *          example={"code": "code", "message": "message"},
+     *          example={"code": "400", "message": "errors"},
      *          @SWG\Property(property="code", type="integer", description="Http status code"),
-     *          @SWG\Property(property="message", type="string", description="Error message")
-     *      )
-     * )
-     * @SWG\Response(
-     *      response=409,
-     *      description="'User exists', 'Username exists', 'E-mail exists'",
-     *      @SWG\Schema(
-     *          type="object",
-     *          example={"code": "code", "message": "message"},
-     *          @SWG\Property(property="code", type="integer", description="Http status code"),
-     *          @SWG\Property(property="message", type="string", description="Error message")
+     *          @SWG\Property(property="errors", type="string", description="Error message")
      *      )
      * )
      * @Rest\Route("/register", methods={"POST"})
@@ -286,6 +278,7 @@ class SecurityRegisterController extends FOSRestController implements SecurityRe
     public function postRegisterAction(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), false);
+        $validator = $this->container->get('app_validator');
 
         $user = new User();
         $user->setUsername($data->username);
@@ -294,8 +287,11 @@ class SecurityRegisterController extends FOSRestController implements SecurityRe
         $password = $encoder->encodePassword($user, $data->password);
         $user->setPassword($password);
 
-        $validator = $this->get('validator');
-        $validator->validate($user->getEmail());
+        $errors = $validator->toArray($user);
+
+        if ($errors) {
+            return Response::json(Code::BAD_REQUEST, $errors);
+        }
 
         $tokenGenerator = $this->container->get('token_generator');
 
@@ -307,24 +303,7 @@ class SecurityRegisterController extends FOSRestController implements SecurityRe
         $em->persist($user);
         $em->flush();
 
-        /* if (!$user->isEnabled()) {
-             //TODO: перенести в настройки
-             $routes = $this->container->get('router')->getRouteCollection();
-             $route = new Route('app_register_confirm');
-             $routes->add('app_register_confirm', $route);
-
-             $mailer = $this->container->get('mail_sender');
-
-             $mailer->setTemplate('emails/register_confirm.html.twig')
-                 ->setConfirmationRoute(
-                     'app_register_confirm'
-                 )
-                 ->sendConfirmationEmailMessage($user);
-         }*/
-
-        return new JsonResponse(array(
-            'success' => 'ok'
-        ));
+        return Response::json(Code::OK);
     }
 
     /**

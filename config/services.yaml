@@ -70,6 +70,13 @@ services:
             - '@doctrine.orm.entity_manager'
         public: true
 
+
+    app_validator:
+        class: App\Utils\Validator
+        arguments:
+            - '@validator'
+        public: true
+
     profile_service:
         class: App\Service\Profile
         arguments:

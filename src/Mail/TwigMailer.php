@@ -5,8 +5,11 @@ namespace App\Mail;
 use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Mailer\TwigSwiftMailer;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use App\Entity\Client;
 
+/**
+ * Class TwigMailer
+ * @package App\Mail
+ */
 class TwigMailer extends TwigSwiftMailer
 {
     protected $template;
@@ -176,41 +179,6 @@ class TwigMailer extends TwigSwiftMailer
             $this->template,
             array(
                 'username' => $user->getUsername(),
-                'linkHref' => $path,
-                'linkText' => explode('://', $path)[1]
-            )
-        );
-
-        return $this->sendEmailMessage($prepared);
-    }
-
-    /**
-     * @param Client $client
-     * @return integer
-     */
-    public function sendClientOfferEmailMessage(Client $client): int
-    {
-        $fromEmail = $this->getFromEmail('confirmation');
-        $toEmail = $client->getEmail();
-
-        $nameAndPatronymic = implode(' ', array(
-            $client->getFirstName(),
-            $client->getPatronymic()
-        ));
-
-        $path = $this->router->generate(
-            'app_client_offer',
-            array(),
-            UrlGeneratorInterface::ABSOLUTE_URL
-        );
-
-        $prepared = $this->renderEmailMessage(
-            'Возврат денег за билеты',
-            $fromEmail,
-            $toEmail,
-            'emails/client_offer.html.twig',
-            array(
-                'nameAndPatronymic' => $nameAndPatronymic,
                 'linkHref' => $path,
                 'linkText' => explode('://', $path)[1]
             )

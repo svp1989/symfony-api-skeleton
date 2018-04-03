@@ -8,12 +8,22 @@ use Doctrine\ORM\EntityManager;
 use App\Entity\Profile as ProfileEntity;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+/**
+ * Class Profile
+ * @package App\Service
+ */
 class Profile
 {
     private $user;
     private $entityManager;
     private $profile;
 
+    /**
+     * Profile constructor.
+     * @param TokenAuthenticator $authToken
+     * @param RequestStack $requestStack
+     * @param EntityManager $entityManager
+     */
     public function __construct(TokenAuthenticator $authToken, RequestStack $requestStack, EntityManager $entityManager)
     {
         $request = $requestStack->getCurrentRequest();
@@ -23,6 +33,10 @@ class Profile
         $this->profile = new ProfileEntity();
     }
 
+    /**
+     * @param $content
+     * @return array|bool
+     */
     public function create($content)
     {
         try {
@@ -53,6 +67,10 @@ class Profile
         }
     }
 
+    /**
+     * @param $content
+     * @return array|bool
+     */
     public function update($content)
     {
         try {
