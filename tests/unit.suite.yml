@@ -1,0 +1,9 @@
+actor: UnitTester
+modules:
+    enabled:
+      - Db:
+         dsn: 'mysql:host=localhost;dbname=skeleton'
+         user: 'root'
+         password: 'root'
+         populate: true # run populator before all tests
+         cleanup: true # run populator before each test
