@@ -6,21 +6,20 @@ use App\Controller\Security\SecurityRegister;
 use App\Entity\User;
 use App\Utils\Code;
 use App\Utils\Response;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Swagger\Annotations as SWG;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Email as EmailConstraint;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
-use Symfony\Component\Validator\Constraints\Email;
 
 /**
  * Class SecurityRegisterController
  * Registration
  * @package App\Controller
  */
-class SecurityRegisterController extends Controller implements SecurityRegister
+class SecurityRegisterController extends FOSRestController implements SecurityRegister
 {
 
     const REQUIRE_FIELD = [

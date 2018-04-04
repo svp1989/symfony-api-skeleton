@@ -86,3 +86,10 @@ services:
             - '@Symfony\Component\HttpFoundation\RequestStack'
             - '@doctrine.orm.entity_manager'
         public: true
+
+    kernel.listener.acme_foo_exception_listener:
+        class: App\Listener\ExceptionListener
+        arguments:
+            - '@kernel'
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
