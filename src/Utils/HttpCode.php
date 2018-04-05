@@ -1,7 +1,12 @@
 <?php
 namespace App\Utils;
 
-class Code
+/**
+ * Class HttpCode - use for http response
+ * Full list http codes https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+ * @package App\Utils
+ */
+class HttpCode
 {
     //200
     const OK = 200;
@@ -17,6 +22,4 @@ class Code
 
     //500
     const INTERNAL_SERVER_ERROR = 500;
-
-
 }

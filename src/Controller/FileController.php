@@ -11,11 +11,10 @@ use App\Utils\UploadLimits;
 use App\Entity\Files;
 
 /**
- * Class SecurityResettingController
- * Класс восстановления пароля
+ * Class FileController
  * @package App\Controller
  */
-class FileeController extends Controller
+class FileController extends Controller
 {
     /**
      * Upload file on the server

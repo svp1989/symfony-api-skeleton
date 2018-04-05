@@ -11,15 +11,15 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class Response
 {
     /**
-     * @param int $code
-     * @param $data
+     * @param int $httpCode
+     * @param string $message
      * @return JsonResponse
      */
-    public static function json(int $code, $data = 'success'): JsonResponse
+    public static function toJson(int $httpCode, $message = 'success'): JsonResponse
     {
         return new JsonResponse([
-            'code' => $code,
-            'message' => $data
-        ], $code);
+            'code' => $httpCode,
+            'message' => $message
+        ], $httpCode);
     }
 }

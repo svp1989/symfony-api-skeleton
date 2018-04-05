@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Controller\Security\SecurityRegister;
 use App\Entity\User;
-use App\Utils\Code;
+use App\Utils\HttpCode;
 use App\Utils\Response;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -289,7 +289,7 @@ class SecurityRegisterController extends FOSRestController implements SecurityRe
         $errors = $validator->toArray($user);
 
         if ($errors) {
-            return Response::json(Code::BAD_REQUEST, $errors);
+            return Response::toJson(HttpCode::BAD_REQUEST, $errors);
         }
 
         $tokenGenerator = $this->container->get('token_generator');
@@ -302,7 +302,7 @@ class SecurityRegisterController extends FOSRestController implements SecurityRe
         $em->persist($user);
         $em->flush();
 
-        return Response::json(Code::OK);
+        return Response::toJson(HttpCode::OK);
     }
 
     /**
