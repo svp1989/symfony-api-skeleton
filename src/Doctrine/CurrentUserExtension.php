@@ -52,7 +52,6 @@ final class CurrentUserExtension implements QueryCollectionExtensionInterface, Q
         $user = $this->tokenStorage->getToken()->getUser();
         if ($user instanceof User && in_array($resourceClass, self::ENTITIES)
             && !$this->authorizationChecker->isGranted('ROLE_ADMIN')
-            && !$this->authorizationChecker->isGranted('ROLE_LAWYER')
         ) {
             $rootAlias = $queryBuilder->getRootAliases()[0];
             switch ($resourceClass) {
