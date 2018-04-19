@@ -4,8 +4,12 @@
 ## Installation
 
 ### 1. Clone repository
+Create project :
 
-Clone repository from GitHub:
+```bash
+composer create-project svp1989/symfony-api-skeleton
+```
+Or clone repository from GitHub:
 
 ```bash
 git clone https://github.com/svp1989/symfony-api-skeleton.git
