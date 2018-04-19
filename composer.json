@@ -1,6 +1,15 @@
 {
+    "name": "svp1989/symfony-api-skeleton",
+    "description": "Symfony api skeleton based on symfony-flex, api-platform, JWT etc.",
+    "authors": [
+        {
+            "name": "Skvortsov Vitaly",
+            "email": "skvorvit@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
     "type": "project",
-    "license": "proprietary",
+    "license": "MIT",
     "require": {
         "php": "^7.1.3",
         "ext-iconv": "*",
