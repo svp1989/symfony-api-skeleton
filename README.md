@@ -7,7 +7,7 @@
 Create project :
 
 ```bash
-composer create-project svp1989/symfony-api-skeleton
+composer create-project svp1989/symfony-api-skeleton:@dev
 ```
 Or clone repository from GitHub:
 
